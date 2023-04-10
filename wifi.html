@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<html>
+
+  <head>
+
+    <meta charset="UTF-8">
+
+    <title>Connect to WiFi</title>
+
+  </head>
+
+  <body>
+
+    <h1>Connect to WiFi</h1>
+
+    <button onclick="connectToWiFi()">Connect</button>
+
+    <p>Selected network: <span id="selected-network"></span></p>
+
+    <script>
+
+      function connectToWiFi() {
+
+  if ('networkInformation' in navigator) {
+
+    navigator.networkInformation.getWiFiStatus().then(status => {
+
+      if (status === 'connected') {
+
+        console.log('Already connected to a WiFi network.');
+
+      } else {
+
+        // Prompt the user to select a nearby WiFi network
+
+        navigator.networkInformation.requestWifiNetwork().then(network => {
+
+          // Display the selected network name in the UI
+
+          document.getElementById('selected-network').textContent = network.ssid;
+
+          console.log(`Connected to ${network.ssid} successfully.`);
+
+        }).catch(error => {
+
+          console.error(`Failed to connect to WiFi network: ${error}`);
+
+        });
+
+      }
+
+    });
+
+  } else {
+
+    console.error('Network Information API is not supported in this browser.');
+
+  }
+
+}
+
+    </script>
+
+  </body>
+
+</html>
